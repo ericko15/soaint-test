@@ -1,34 +1,28 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
-class FetchGithub extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            location: ''
-        };
-    }
+const FetchGithub = () => {
+    const [data, setData] = useState({
+        name: '',
+        location: ''
+    })
 
-    componentDidMount() {
-        fetch('https://api.github.com/users/workshopsjsmvd')
-            .then(res => res.json())
-            .then(data => {
-                this.setState({
-                    name: data.name,
-                    location: data.location
-                })
-            })
-    }
+    const handleFetchData = useCallback(async () => {
+        const response = await fetch('https://api.github.com/users/workshopsjsmvd')
+        const { name, location } = await response.json()
+        setData({ name, location })
+    }, [])
 
-    render() {
-        return (
-            <>
-                <h1 key="name">{`Nombre: ${this.state.name}`}</h1>,
-                <h2 key="location">{`País: ${this.state.location}`}</h2>
-            </>
-        )
-    }
+    useEffect(() => {
+        handleFetchData()
+    }, [handleFetchData])
+
+    return (
+        <>
+            <h1 key="name">{`Nombre: ${this.state.name}`}</h1>,
+            <h2 key="location">{`País: ${this.state.location}`}</h2>
+        </>
+    )
 }
 
 ReactDOM.render(

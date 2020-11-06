@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const FetchGithub = () => {
@@ -8,9 +8,13 @@ const FetchGithub = () => {
     })
 
     const handleFetchData = useCallback(async () => {
-        const response = await fetch('https://api.github.com/users/workshopsjsmvd')
-        const { name, location } = await response.json()
-        setData({ name, location })
+        try {
+            const response = await fetch('https://api.github.com/users/workshopsjsmvd')
+            const { name, location } = await response.json()
+            setData({ name, location })
+        } catch (e) {
+            console.error(e)
+        }
     }, [])
 
     useEffect(() => {
@@ -19,8 +23,8 @@ const FetchGithub = () => {
 
     return (
         <>
-            <h1 key="name">{`Nombre: ${this.state.name}`}</h1>,
-            <h2 key="location">{`País: ${this.state.location}`}</h2>
+            <h1>{`Nombre: ${data.name}`}</h1>,
+            <h2>{`País: ${data.location}`}</h2>
         </>
     )
 }
